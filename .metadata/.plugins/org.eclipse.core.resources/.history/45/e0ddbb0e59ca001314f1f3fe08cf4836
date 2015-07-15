@@ -1,0 +1,103 @@
+package com.stander.mapstest;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import android.location.Location;
+import android.util.Log;
+
+public class Places implements Runnable
+{
+	private Location mLocation;
+	
+	public Places(Location tLocation)
+	{
+		mLocation = tLocation;
+	}
+	
+	@Override
+	public void run() 
+	{
+
+		
+	}
+
+	private void GetNearbyPlaces() {
+		Log.i("near", "Getting nearby places from " + mLocation.getLatitude() + ", " + mLocation.getLongitude());
+		
+		String requestUrl = "";
+		requestUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
+		requestUrl += "key=" + "AIzaSyDN9KnxzUNW-a5ykdgDeCe-zJ3ATK1FYZQ";
+		requestUrl += "&location=" + mLocation.getLatitude() + "," + mLocation.getLongitude();
+		requestUrl += "&radius=1000";
+		requestUrl += "&sensor=true";
+		requestUrl += "&types=food";
+		
+		Log.i("near", requestUrl);
+		
+		HttpResponse response = null;
+		HttpClient httpClient = new DefaultHttpClient();
+		httpClient.getParams().setParameter("http.socket.timeout",  Integer.valueOf(0));
+		
+		
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpGet httpget = new HttpGet(requestUrl);
+		HttpResponse response;
+		try
+		{
+			Log.i("near", "about to execute...");
+			
+			response = httpClient.execute(httpget);
+			Log.i("near", response.getStatusLine().toString());
+			
+			HttpEntity entity = response.getEntity();
+			if(entity != null)
+			{
+				InputStream instream = entity.getContent();
+				String result = convertStreamToString(instream);
+				instream.close();
+				
+				Log.i("near", result);
+			}
+		}
+		catch (Exception ex) 
+		{
+			Log.i("HTTP", "Exception caught: " + ex.getMessage());
+		}
+	}
+	
+	 private static String convertStreamToString(InputStream is) {
+		    /*
+		     * To convert the InputStream to String we use the BufferedReader.readLine()
+		     * method. We iterate until the BufferedReader return null which means
+		     * there's no more data to read. Each line will appended to a StringBuilder
+		     * and returned as String.
+		     */
+		    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		    StringBuilder sb = new StringBuilder();
+
+		    String line = null;
+		    try {
+		        while ((line = reader.readLine()) != null) {
+		            sb.append(line + "\n");
+		        }
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    } finally {
+		        try {
+		            is.close();
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+		    }
+		    return sb.toString();
+		}
+}

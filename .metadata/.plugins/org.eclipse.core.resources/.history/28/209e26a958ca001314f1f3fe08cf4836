@@ -1,0 +1,12 @@
+package com.stander.mapstest;
+
+public class Places implements Runnable
+{
+
+	@Override
+	public void run() 
+	{
+		
+	}
+
+}

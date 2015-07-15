@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="place_types">
+        <item>bar</item>
+        <item>cafe</item>
+        <item>food</item>
+        <item>gas_station</item>
+        <item>gym</item>
+        <item>library</item>
+        <item>lodging</item>
+        <item>movie_theater</item>
+        <item>night_club</item>
+        <item>park</item>
+        <item>shopping_mall</item>
+        <item>spa</item>
+    </array>
+    <array name="place_names">
+        <item>Bar</item>
+        <item>Cafe</item>
+        <item>Food</item>
+        <item>Gas Station</item>
+        <item>Gym</item>
+        <item>Library</item>
+        <item>Lodging</item>
+        <item>Movie Theater</item>
+        <item>Night Club</item>
+        <item>Park</item>
+        <item>Shopping Mall</item>
+        <item>Spa</item>
+    </array>
+</resources>

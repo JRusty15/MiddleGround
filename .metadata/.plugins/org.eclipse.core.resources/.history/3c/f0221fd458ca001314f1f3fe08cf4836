@@ -1,0 +1,68 @@
+package com.stander.mapstest;
+
+import java.io.InputStream;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import android.util.Log;
+
+public class Places implements Runnable
+{
+	private Location mLocation;
+	
+	public Places(Location tLocation)
+	{
+		mLocation = tLocation;
+	}
+	
+	@Override
+	public void run() 
+	{
+
+		
+	}
+
+	private void GetNearbyPlaces() {
+		Log.i("near", "Getting nearby places from " + mLocation.getLatitude() + ", " + mLocation.getLongitude());
+		
+		String requestUrl = "";
+		
+		requestUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
+		requestUrl += "key=" + "AIzaSyDN9KnxzUNW-a5ykdgDeCe-zJ3ATK1FYZQ";
+		requestUrl += "&location=" + mLocation.getLatitude() + "," + mLocation.getLongitude();
+		requestUrl += "&radius=1000";
+		requestUrl += "&sensor=true";
+		requestUrl += "&types=food";
+		
+		Log.i("near", requestUrl);
+		
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpGet httpget = new HttpGet(requestUrl);
+		HttpResponse response;
+		try
+		{
+			Log.i("near", "about to execute...");
+			
+			response = httpClient.execute(httpget);
+			Log.i("near", response.getStatusLine().toString());
+			
+			HttpEntity entity = response.getEntity();
+			if(entity != null)
+			{
+				InputStream instream = entity.getContent();
+				String result = convertStreamToString(instream);
+				instream.close();
+				
+				Log.i("near", result);
+			}
+		}
+		catch (Exception ex) 
+		{
+			Log.i("HTTP", "Exception caught: " + ex.getMessage());
+		}
+	}
+}
